@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Aditya Sawant - Cyber Security Analyst</title>
+  <title>Aditya Sawant - Assistant Manager & Cyber Security Analyst</title>
   <style>
     body {
       margin: 0;
@@ -20,6 +20,14 @@
       text-align: center;
       padding-bottom: 20px;
       border-bottom: 2px solid #e0e0e0;
+    }
+    .profile-pic {
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #3498db;
+      margin-bottom: 15px;
     }
     .header h1 {
       margin: 0;
@@ -62,36 +70,35 @@
 <body>
   <div class="container">
     <div class="header">
+      <img src="profile.jpg" alt="Aditya Sawant" class="profile-pic" />
       <h1>Aditya Sawant</h1>
-      <p class="highlight">Cyber Security Analyst</p>
-      <p>Email: <a href="mailto:sawantaditya44@gmail.com">sawantaditya44@gmail.com</a> | Phone: 9527365787 | Location: Badlapur, India</p>
+      <p class="highlight">Assistant Manager - Cyber Security Analyst</p>
+      <p>
+        Email: <span id="email"></span> |
+        Phone: 9527365787 |
+        Location: Badlapur, India
+      </p>
     </div>
 
     <div class="section">
-      <h2>Professional Summary</h2>
+      <h2>Professional Overview</h2>
       <ul>
-        <li>4 years of experience in Information Security, focusing on VAPT for Web, Mobile, API & Thick Clients.</li>
-        <li>Expert in manual testing, DAST, SAST, and ethical hacking with <span class="highlight">100+ clients</span> across industries.</li>
-        <li>Certified in <span class="highlight">eWPTXv2</span> and Fortify SCA, with strong adherence to OWASP, PCI-DSS standards.</li>
-        <li>Proficient with security tools like Burp Suite, Nessus, Frida, MobSF, SQLMap, and Metasploit.</li>
+        <li>Assistant Manager with <span class="highlight">4+ years</span> of proven expertise in cybersecurity.</li>
+        <li>Leading teams and end-to-end security projects including Web, Mobile, API, and Network testing.</li>
+        <li>Specialized in Vulnerability Assessment & Penetration Testing (VAPT), DAST, SAST, and ethical hacking.</li>
+        <li>Certified in <span class="highlight">eWPTXv2</span> and Fortify SCA with hands-on testing across 100+ applications.</li>
+        <li>Experienced in delivering POC-driven reports with strategic security recommendations.</li>
       </ul>
     </div>
 
     <div class="section">
-      <h2>Experience</h2>
+      <h2>Key Skills</h2>
       <ul>
-        <li><span class="highlight">Sr. Security Analyst</span> – QRC Assurance (Jul 2024 – Present): Led security teams, automated reporting, worked closely with devs, handled advanced reporting.</li>
-        <li><span class="highlight">Security Analyst</span> – QRC Assurance (Apr 2021 – Jun 2024): Performed VAPT, PCI ASV scans, delivered detailed client-specific reports.</li>
-      </ul>
-    </div>
-
-    <div class="section">
-      <h2>Skills & Tools</h2>
-      <ul>
-        <li><span class="highlight">Web, Mobile, API Security Testing</span> – OWASP Top 10, PCI standards</li>
-        <li><span class="highlight">Network VAPT</span> – Nessus, Nmap, Metasploit</li>
-        <li><span class="highlight">Tools</span> – Burp Suite, HP Fortify, GitHub, SQLMap, Frida, MobSF</li>
-        <li><span class="highlight">Programming</span> – Java, Python</li>
+        <li><span class="highlight">Web & API Security Testing</span> – OWASP Top 10, PCI-DSS, Burp Suite, Postman, SQLMap</li>
+        <li><span class="highlight">Mobile Application Testing</span> – OWASP Mobile Top 10, MobSF, Frida, Objection</li>
+        <li><span class="highlight">Network & Thick Client VAPT</span> – Nmap, Nessus, Metasploit, Custom Scripting</li>
+        <li><span class="highlight">Static Code Analysis</span> – HP Fortify, Android Studio</li>
+        <li><span class="highlight">Programming</span> – Python, Java | <span class="highlight">Tools</span> – GitHub, Firebase</li>
       </ul>
     </div>
 
@@ -106,20 +113,19 @@
     <div class="section">
       <h2>Education</h2>
       <ul>
-        <li>B.E in Information Technology, Terna Engineering College, Mumbai University – CGPA: 7.76 (2020)</li>
-      </ul>
-    </div>
-
-    <div class="section">
-      <h2>Awards</h2>
-      <ul>
-        <li><span class="highlight">Best Performer</span> – Security Department, QRC Assurance</li>
+        <li>B.E in Information Technology – Terna Engineering College, Mumbai University (2020), CGPA: 7.76</li>
       </ul>
     </div>
 
     <div class="footer">
-      &copy; 2025 Aditya Sawant | Cyber Security Analyst
+      &copy; 2025 Aditya Sawant | Assistant Manager - Cyber Security Analyst
     </div>
   </div>
+
+  <script>
+    const emailUser = "sawantaditya44";
+    const emailDomain = "gmail.com";
+    document.getElementById("email").innerHTML = `<a href="mailto:${emailUser}@${emailDomain}">${emailUser}[at]${emailDomain}</a>`;
+  </script>
 </body>
 </html>
