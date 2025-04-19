@@ -3,68 +3,90 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>My Knowledge Portfolio</title>
+  <title>Aditya's Learning Archive</title>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&display=swap');
+
     body {
       margin: 0;
-      font-family: 'Arial', sans-serif;
-      background: #fdfdfd;
-      color: #000;
+      font-family: 'Outfit', sans-serif;
+      background: #fef6e4;
+      color: #001858;
     }
 
     header {
-      background: #fff;
-      border: 4px solid #000;
+      background: #ffffff;
+      border: 4px solid #001858;
       padding: 2rem;
       margin: 2rem;
-      box-shadow: 10px 10px 0px #000;
+      box-shadow: 12px 12px 0px #001858;
+      text-align: center;
     }
 
     header h1 {
       margin: 0;
-      font-size: 2.5rem;
+      font-size: 3rem;
+      color: #f582ae;
     }
 
     nav {
       display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
       gap: 1rem;
       margin-top: 1rem;
     }
 
     nav a {
       text-decoration: none;
-      color: #000;
-      background: #f1f1f1;
-      padding: 0.5rem 1rem;
-      border: 2px solid #000;
-      box-shadow: 5px 5px 0px #000;
-      transition: all 0.2s ease;
+      color: #001858;
+      background: #f3d2c1;
+      padding: 0.7rem 1.5rem;
+      border: 3px solid #001858;
+      box-shadow: 6px 6px 0px #001858;
+      font-weight: bold;
+      transition: transform 0.2s ease;
     }
 
     nav a:hover {
-      background: #000;
-      color: #fff;
+      background: #001858;
+      color: #fef6e4;
+      transform: scale(1.05);
     }
 
     section {
-      border: 3px solid #000;
+      border: 3px solid #001858;
       margin: 2rem;
       padding: 1.5rem;
-      background: #fff;
-      box-shadow: 8px 8px 0px #000;
+      background: #ffffff;
+      box-shadow: 10px 10px 0px #001858;
     }
 
     section h2 {
       margin-top: 0;
       font-size: 2rem;
+      color: #f582ae;
+    }
+
+    section p {
+      font-size: 1.1rem;
+      line-height: 1.6;
     }
 
     footer {
       text-align: center;
       margin: 2rem;
       font-size: 0.9rem;
-      border-top: 2px solid #000;
+      border-top: 2px solid #001858;
       padding-top: 1rem;
+      color: #8bd3dd;
+    }
+
+    @media (max-width: 768px) {
+      nav {
+        flex-direction: column;
+        align-items: center;
+      }
     }
   </style>
 </head>
@@ -81,26 +103,26 @@
 
   <section id="web">
     <h2>Web Security</h2>
-    <p>A collection of techniques, labs, and notes from OWASP Top 10, PortSwigger, bug bounties, and more.</p>
+    <p>Dive deep into OWASP Top 10, PortSwigger labs, and real-world bug bounty findings. I've documented everything from bypass techniques to advanced recon tips.</p>
   </section>
 
   <section id="tools">
     <h2>Tools & Automation</h2>
-    <p>Scripts, Burp Suite extensions, Docker images, and frameworks I’ve built or use regularly in pentesting.</p>
+    <p>Here you'll find all the utilities I use and create—from Python scripts to Burp Suite extensions to custom automation built for speed and precision in pentesting.</p>
   </section>
 
   <section id="certs">
     <h2>Certifications & Trainings</h2>
-    <p>List of cybersecurity courses, badges, and certifications I’ve earned across my journey.</p>
+    <p>A curated list of courses, certifications, and training paths I’ve completed. Each one reflects a step forward in my cybersecurity learning journey.</p>
   </section>
 
   <section id="projects">
     <h2>Projects & Labs</h2>
-    <p>Personal projects, labs solved (like Hack The Box, TryHackMe), and writeups.</p>
+    <p>Explore my practical experience—solutions to Hack The Box, TryHackMe rooms, and personal labs designed to simulate real-world attack scenarios.</p>
   </section>
 
   <footer>
-    <p>Powered by Aditya | Styled in Neobrutalism</p>
+    <p>Powered by Aditya | Designed in Neobrutalism</p>
   </footer>
 </body>
 </html>
