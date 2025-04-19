@@ -8,14 +8,16 @@
   <style>
     body {
       margin: 0;
+      background-color: #fff;
       font-family: 'Montserrat', sans-serif;
-      background: #fff;
       color: #111;
       opacity: 0;
       animation: fadeIn 0.8s ease forwards;
     }
 
-    @keyframes fadeIn { to { opacity: 1; } }
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
 
     header {
       background: #e53935;
@@ -56,13 +58,23 @@
       line-height: 1.5;
     }
 
-    .back-btn {
-      display: inline-block;
-      margin: 40px 20px;
-      padding: 10px 20px;
-      background: #000;
-      color: #fff;
-      text-decoration: none;
+    .sub-vuln {
+      margin-top: 15px;
+      padding-left: 10px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    .sub-vuln:hover {
+      background: #fbeaea;
+    }
+
+    .sub-vuln .vuln-details {
+      margin-top: 10px;
+      padding-left: 10px;
+      background: #f9f9f9;
+      display: none;
+      border-left: 3px solid #e53935;
     }
 
     .example {
@@ -73,38 +85,87 @@
       font-family: monospace;
       font-size: 0.9rem;
     }
+
+    .back-btn {
+      display: inline-block;
+      margin: 40px 20px;
+      padding: 10px 20px;
+      background: #000;
+      color: #fff;
+      text-decoration: none;
+    }
+
+    .back-btn:hover {
+      background: #444;
+    }
   </style>
 </head>
 <body>
 
   <header>Web Application Security</header>
-
   <section>
-    <!-- Vulnerability 1 -->
+
+    <!-- IDOR with sub-scenarios -->
     <div class="vuln-card" onclick="toggle(this)">
       <div class="vuln-title">1. IDOR – Insecure Direct Object Reference</div>
       <div class="vuln-details">
-        The application exposes internal object references, like user IDs, without proper authorization checks.
-        <div class="example">
-          URL: /profile/123<br>
-          Change to /profile/124 → Accessing someone else’s profile
+        Improper access control leads to unauthorized access to user data by modifying object identifiers like user IDs, order numbers, or file references.
+
+        <div class="sub-vuln" onclick="event.stopPropagation(); toggle(this)">
+          <strong>➤ Profile Access</strong>
+          <div class="vuln-details">
+            Modifying a user ID in the URL gave access to other users' profiles.
+            <div class="example">
+              GET /user/102 → Changed to /user/103<br>
+              Result: Viewed another user's private data.
+            </div>
+          </div>
+        </div>
+
+        <div class="sub-vuln" onclick="event.stopPropagation(); toggle(this)">
+          <strong>➤ Booking/Order Manipulation</strong>
+          <div class="vuln-details">
+            Attacker could cancel someone else's booking due to lack of ownership validation.
+            <div class="example">
+              GET /cancelBooking?id=ABC123 → Changed to another booking ID → booking cancelled
+            </div>
+          </div>
+        </div>
+
+        <div class="sub-vuln" onclick="event.stopPropagation(); toggle(this)">
+          <strong>➤ File Download ID Manipulation</strong>
+          <div class="vuln-details">
+            Changing the file ID parameter allowed unauthorized file downloads.
+            <div class="example">
+              /download?file=confidential-report.pdf
+            </div>
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- Vulnerability 2 -->
+    <!-- Host Header Injection Open Redirect -->
     <div class="vuln-card" onclick="toggle(this)">
-      <div class="vuln-title">2. Stored XSS – Comment Section Injection</div>
+      <div class="vuln-title">2. Host Header Injection – Open Redirect</div>
       <div class="vuln-details">
-        Attacker injects a JavaScript payload into a persistent field. When other users visit the page, the script executes in their browser.
+        Application blindly trusted the Host header, leading to redirection to an arbitrary domain.
         <div class="example">
-          Input: &lt;script&gt;alert('XSS')&lt;/script&gt;<br>
-          Rendered unsanitized in blog comments section.
+          Host: attacker.com<br>
+          → Victim visits /redirect → lands on attacker.com (phishing or malware delivery)
         </div>
       </div>
     </div>
 
-    <!-- Add more here -->
+    <!-- Unintended Empty File Downloads -->
+    <div class="vuln-card" onclick="toggle(this)">
+      <div class="vuln-title">3. Empty File Download (Unintended Exposure)</div>
+      <div class="vuln-details">
+        Files like `terms.pdf` and `manual.docx` were available publicly but had no content — indicating incomplete upload logic or placeholder exposure.
+        <div class="example">
+          GET /public/terms.pdf → HTTP 200 OK, but file = 0 bytes
+        </div>
+      </div>
+    </div>
 
     <a href="index.html" class="back-btn">← Back to Home</a>
   </section>
