@@ -1,128 +1,109 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Aditya's Learning Archive</title>
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@600&display=swap" rel="stylesheet">
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&display=swap');
-
     body {
       margin: 0;
-      font-family: 'Outfit', sans-serif;
-      background: #fef6e4;
-      color: #001858;
+      background: #fff8e7;
+      font-family: 'Rubik', sans-serif;
+      color: #1a1a1a;
     }
-
     header {
-      background: #ffffff;
-      border: 4px solid #001858;
-      padding: 2rem;
-      margin: 2rem;
-      box-shadow: 12px 12px 0px #001858;
       text-align: center;
+      padding: 40px 20px;
+      border: 4px solid #001f54;
+      margin: 30px;
+      box-shadow: 6px 6px 0 #001f54;
+      background: #ffffff;
     }
-
     header h1 {
-      margin: 0;
-      font-size: 3rem;
-      color: #f582ae;
+      font-size: 2.5rem;
+      color: #001f54;
+      margin-bottom: 30px;
     }
-
-    nav {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 1rem;
-      margin-top: 1rem;
-    }
-
-    nav a {
-      text-decoration: none;
-      color: #001858;
-      background: #f3d2c1;
-      padding: 0.7rem 1.5rem;
-      border: 3px solid #001858;
-      box-shadow: 6px 6px 0px #001858;
+    .nav-buttons button {
+      font-size: 1rem;
+      padding: 12px 20px;
+      margin: 0 10px;
+      border: none;
+      background: #ffe4b3;
+      border: 3px solid #001f54;
+      box-shadow: 5px 5px 0 #001f54;
+      cursor: pointer;
       font-weight: bold;
-      transition: transform 0.2s ease;
     }
-
-    nav a:hover {
-      background: #001858;
-      color: #fef6e4;
-      transform: scale(1.05);
+    .nav-buttons button:hover {
+      transform: translateY(-2px);
     }
 
     section {
-      border: 3px solid #001858;
-      margin: 2rem;
-      padding: 1.5rem;
+      margin: 40px 30px;
+      padding: 20px;
       background: #ffffff;
-      box-shadow: 10px 10px 0px #001858;
+      border: 4px solid #001f54;
+      box-shadow: 6px 6px 0 #001f54;
     }
 
-    section h2 {
-      margin-top: 0;
-      font-size: 2rem;
-      color: #f582ae;
+    h2 {
+      font-size: 1.8rem;
+      margin-bottom: 15px;
     }
 
-    section p {
-      font-size: 1.1rem;
+    .web-security h2 {
+      color: #ff6f00;
+    }
+    .tools h2 {
+      color: #005f99;
+    }
+    .certifications h2 {
+      color: #2e7d32;
+    }
+    .projects h2 {
+      color: #512da8;
+    }
+
+    p {
+      font-size: 1rem;
       line-height: 1.6;
-    }
-
-    footer {
-      text-align: center;
-      margin: 2rem;
-      font-size: 0.9rem;
-      border-top: 2px solid #001858;
-      padding-top: 1rem;
-      color: #8bd3dd;
-    }
-
-    @media (max-width: 768px) {
-      nav {
-        flex-direction: column;
-        align-items: center;
-      }
+      color: #2c2c2c;
     }
   </style>
 </head>
 <body>
+
   <header>
     <h1>Aditya's Learning Archive</h1>
-    <nav>
-      <a href="#web">Web Security</a>
-      <a href="#tools">Tools</a>
-      <a href="#certs">Certifications</a>
-      <a href="#projects">Projects</a>
-    </nav>
+    <div class="nav-buttons">
+      <button>Web Security</button>
+      <button>Tools</button>
+      <button>Certifications</button>
+      <button>Projects</button>
+    </div>
   </header>
 
-  <section id="web">
+  <section class="web-security">
     <h2>Web Security</h2>
     <p>Dive deep into OWASP Top 10, PortSwigger labs, and real-world bug bounty findings. I've documented everything from bypass techniques to advanced recon tips.</p>
   </section>
 
-  <section id="tools">
+  <section class="tools">
     <h2>Tools & Automation</h2>
     <p>Here you'll find all the utilities I use and create—from Python scripts to Burp Suite extensions to custom automation built for speed and precision in pentesting.</p>
   </section>
 
-  <section id="certs">
+  <section class="certifications">
     <h2>Certifications & Trainings</h2>
     <p>A curated list of courses, certifications, and training paths I’ve completed. Each one reflects a step forward in my cybersecurity learning journey.</p>
   </section>
 
-  <section id="projects">
+  <section class="projects">
     <h2>Projects & Labs</h2>
     <p>Explore my practical experience—solutions to Hack The Box, TryHackMe rooms, and personal labs designed to simulate real-world attack scenarios.</p>
   </section>
 
-  <footer>
-    <p>Powered by Aditya | Designed in Neobrutalism</p>
-  </footer>
 </body>
 </html>
