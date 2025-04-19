@@ -3,163 +3,105 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Aditya's Learning Archive</title>
+  <title>Aditya's Cybersecurity Knowledge</title>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@500&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-color: #ffffff;
-      --text-color: #111111;
-      --card-bg: #fafafa;
-      --border-thick: 4px;
-      --font-title: 'Bebas Neue', sans-serif;
-      --font-body: 'Montserrat', sans-serif;
-
       --red: #e53935;
       --blue: #1e88e5;
       --yellow: #fdd835;
       --black: #111111;
+      --bg-color: #ffffff;
+      --font-title: 'Bebas Neue', sans-serif;
+      --font-body: 'Montserrat', sans-serif;
     }
 
     body {
       margin: 0;
       background-color: var(--bg-color);
-      color: var(--text-color);
       font-family: var(--font-body);
+      color: var(--black);
+      opacity: 0;
+      animation: fadeIn 1s ease forwards;
+    }
+
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+      }
     }
 
     header {
       text-align: center;
-      padding: 50px 20px;
-      background: var(--bg-color);
-      border-bottom: var(--border-thick) solid var(--black);
+      padding: 60px 20px;
+      border-bottom: 4px solid var(--black);
     }
 
     header h1 {
       font-family: var(--font-title);
       font-size: 3.5rem;
       margin: 0;
-      color: var(--black);
       letter-spacing: 2px;
     }
 
-    .nav-buttons {
-      margin-top: 30px;
+    .nav-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin: 60px 20px;
+      gap: 30px;
     }
 
-    .nav-buttons button {
-      font-family: var(--font-body);
-      font-size: 1rem;
-      font-weight: 600;
-      margin: 0 10px;
-      padding: 12px 24px;
-      border: none;
-      cursor: pointer;
-      color: #fff;
+    .nav-box {
+      width: 250px;
+      height: 120px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 4px solid var(--black);
+      text-align: center;
       text-transform: uppercase;
+      font-weight: bold;
+      font-size: 1.2rem;
       transition: all 0.3s ease;
-    }
-
-    .nav-buttons button:nth-child(1) {
-      background: var(--red);
-    }
-
-    .nav-buttons button:nth-child(2) {
-      background: var(--blue);
-    }
-
-    .nav-buttons button:nth-child(3) {
-      background: var(--yellow);
+      text-decoration: none;
       color: var(--black);
     }
 
-    .nav-buttons button:nth-child(4) {
-      background: var(--black);
+    .nav-box:hover {
+      transform: translateY(-5px);
+      box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.3);
     }
 
-    section {
-      margin: 40px auto;
-      max-width: 900px;
-      padding: 30px;
-      background: var(--card-bg);
-      border-left: var(--border-thick) solid;
-      border-right: var(--border-thick) solid;
-    }
+    .red { background-color: var(--red); color: white; }
+    .blue { background-color: var(--blue); color: white; }
+    .yellow { background-color: var(--yellow); }
+    .black { background-color: var(--black); color: white; }
 
-    .web-security {
-      border-color: var(--red);
-    }
-
-    .tools {
-      border-color: var(--blue);
-    }
-
-    .certifications {
-      border-color: var(--yellow);
-    }
-
-    .projects {
-      border-color: var(--black);
-    }
-
-    h2 {
-      font-family: var(--font-title);
-      font-size: 2rem;
-      margin-bottom: 10px;
-    }
-
-    .web-security h2 {
-      color: var(--red);
-    }
-
-    .tools h2 {
-      color: var(--blue);
-    }
-
-    .certifications h2 {
-      color: var(--yellow);
-    }
-
-    .projects h2 {
-      color: var(--black);
-    }
-
-    p {
-      font-size: 1rem;
-      line-height: 1.6;
+    footer {
+      text-align: center;
+      padding: 40px;
+      font-size: 0.9rem;
+      color: #666;
     }
   </style>
 </head>
 <body>
 
   <header>
-    <h1>Aditya's Learning Archive</h1>
-    <div class="nav-buttons">
-      <button>Web Security</button>
-      <button>Tools</button>
-      <button>Certifications</button>
-      <button>Projects</button>
-    </div>
+    <h1>Aditya's Knowledge Hub</h1>
   </header>
 
-  <section class="web-security">
-    <h2>Web Security</h2>
-    <p>Dive deep into OWASP Top 10, PortSwigger labs, and real-world bug bounty findings. I've documented everything from bypass techniques to advanced recon tips.</p>
-  </section>
+  <div class="nav-container">
+    <a href="web-security.html" class="nav-box red">Web App Security</a>
+    <a href="mobile-security.html" class="nav-box blue">Mobile App Security</a>
+    <a href="tools-labs.html" class="nav-box yellow">Tools & Labs</a>
+    <a href="projects.html" class="nav-box black">Projects</a>
+  </div>
 
-  <section class="tools">
-    <h2>Tools & Automation</h2>
-    <p>Here you'll find all the utilities I use and create—from Python scripts to Burp Suite extensions to custom automation built for speed and precision in pentesting.</p>
-  </section>
-
-  <section class="certifications">
-    <h2>Certifications & Trainings</h2>
-    <p>A curated list of courses, certifications, and training paths I’ve completed. Each one reflects a step forward in my cybersecurity learning journey.</p>
-  </section>
-
-  <section class="projects">
-    <h2>Projects & Labs</h2>
-    <p>Explore my practical experience—solutions to Hack The Box, TryHackMe rooms, and personal labs designed to simulate real-world attack scenarios.</p>
-  </section>
+  <footer>
+    Built with Bauhaus love | © 2025 Aditya
+  </footer>
 
 </body>
 </html>
