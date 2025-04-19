@@ -176,14 +176,8 @@
     <div class="vuln-card" onclick="toggle(this)">
       <div class="vuln-title">3. Reflected Cross-Site Scripting (XSS)</div>
       <div class="vuln-details">
-        User input is reflected in responses without sanitization, leading to script execution.
-        <div class="sub-vuln" onclick="event.stopPropagation(); toggle(this)">
-          <strong>âž¤ Reflected Cross-Site Scripting (XSS)</strong>
-          <div class="vuln-details">
-            User input is reflected in responses without sanitization, leading to script execution.
-            <div class="example">User input reflected in search page: /search?q=&lt;script&gt;alert(1)&lt;/script&gt; â†’ executed script in browser.</div>
-          </div>
-        </div>
+        User input is reflected in responses without sanitization, leading to script execution
+          <div class="example">User input reflected in search page: /search?q=&lt;script&gt;alert(1)&lt;/script&gt; â†’ executed script in browser.</div>
       </div>
     </div>
     
