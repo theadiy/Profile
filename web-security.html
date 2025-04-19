@@ -170,16 +170,409 @@
       </div>
     </div>
 
-    <!-- Unintended Empty File Downloads -->
+  
+
+
     <div class="vuln-card" onclick="toggle(this)">
-      <div class="vuln-title">3. Empty File Download (Unintended Exposure)</div>
+      <div class="vuln-title">3. Reflected Cross-Site Scripting (XSS)</div>
       <div class="vuln-details">
-        Files like `terms.pdf` and `manual.docx` were available publicly but had no content — indicating incomplete upload logic or placeholder exposure.
-        <div class="example">
-          GET /public/terms.pdf → HTTP 200 OK, but file = 0 bytes
+        User input is reflected in responses without sanitization, leading to script execution.
+        <div class="sub-vuln" onclick="event.stopPropagation(); toggle(this)">
+          <strong>âž¤ Reflected Cross-Site Scripting (XSS)</strong>
+          <div class="vuln-details">
+            User input is reflected in responses without sanitization, leading to script execution.
+            <div class="example">User input reflected in search page: /search?q=&lt;script&gt;alert(1)&lt;/script&gt; â†’ executed script in browser.</div>
+          </div>
         </div>
       </div>
     </div>
+    
+    <div class="vuln-card" onclick="toggle(this)">
+      <div class="vuln-title">4. Stored Cross-Site Scripting (XSS)</div>
+      <div class="vuln-details">
+        Malicious scripts are stored on the server and executed when viewed by users.
+        <div class="sub-vuln" onclick="event.stopPropagation(); toggle(this)">
+          <strong>âž¤ Stored Cross-Site Scripting (XSS)</strong>
+          <div class="vuln-details">
+            Malicious scripts are stored on the server and executed when viewed by users.
+            <div class="example">Posted &lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt; in comment â†’ triggered for all users viewing the post.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="vuln-card" onclick="toggle(this)">
+      <div class="vuln-title">5. SQL Injection</div>
+      <div class="vuln-details">
+        Unvalidated SQL input allows attackers to manipulate queries and access unauthorized data.
+        <div class="sub-vuln" onclick="event.stopPropagation(); toggle(this)">
+          <strong>âž¤ SQL Injection</strong>
+          <div class="vuln-details">
+            Unvalidated SQL input allows attackers to manipulate queries and access unauthorized data.
+            <div class="example">Injected &#x27; OR 1=1-- in login form â†’ bypassed authentication and logged in as admin.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="vuln-card" onclick="toggle(this)">
+      <div class="vuln-title">6. Sensitive Information Disclosure via Force Browsing (`application.ini`)</div>
+      <div class="vuln-details">
+        Application config file accessible via direct URL, revealing internal settings.
+        <div class="sub-vuln" onclick="event.stopPropagation(); toggle(this)">
+          <strong>âž¤ Sensitive Information Disclosure via Force Browsing (`application.ini`)</strong>
+          <div class="vuln-details">
+            Application config file accessible via direct URL, revealing internal settings.
+            <div class="example">Accessed internal config at /application.ini â†’ exposed DB credentials and SMTP settings.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="vuln-card" onclick="toggle(this)">
+      <div class="vuln-title">7. HTML Injection</div>
+      <div class="vuln-details">
+        User input is rendered as HTML, which can deface the page or create misleading elements.
+        <div class="sub-vuln" onclick="event.stopPropagation(); toggle(this)">
+          <strong>âž¤ HTML Injection</strong>
+          <div class="vuln-details">
+            User input is rendered as HTML, which can deface the page or create misleading elements.
+            <div class="example">Used &lt;h1&gt;Admin Access&lt;/h1&gt; in input field â†’ displayed manipulated heading in dashboard.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="vuln-card" onclick="toggle(this)">
+      <div class="vuln-title">8. Broken Access Control via Force Browsing (Unauthorized Page Access)</div>
+      <div class="vuln-details">
+        Sensitive pages accessible directly without authentication or role validation.
+        <div class="sub-vuln" onclick="event.stopPropagation(); toggle(this)">
+          <strong>âž¤ Broken Access Control via Force Browsing (Unauthorized Page Access)</strong>
+          <div class="vuln-details">
+            Sensitive pages accessible directly without authentication or role validation.
+            <div class="example">Accessed /admin/reports without auth â†’ full admin report panel visible.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="vuln-card" onclick="toggle(this)">
+      <div class="vuln-title">9. Use of HTTP Protocol (Internal Network)</div>
+      <div class="vuln-details">
+        Application uses unencrypted HTTP, exposing data to interception.
+        <div class="sub-vuln" onclick="event.stopPropagation(); toggle(this)">
+          <strong>âž¤ Use of HTTP Protocol (Internal Network)</strong>
+          <div class="vuln-details">
+            Application uses unencrypted HTTP, exposing data to interception.
+            <div class="example">Logged in via http://intranet.company.com â†’ captured credentials via MITM.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="vuln-card" onclick="toggle(this)">
+      <div class="vuln-title">10. Weak Password Policy (e.g., allowing `1234567890`)</div>
+      <div class="vuln-details">
+        System accepts weak passwords lacking length or complexity requirements.
+        <div class="sub-vuln" onclick="event.stopPropagation(); toggle(this)">
+          <strong>âž¤ Weak Password Policy (e.g., allowing `1234567890`)</strong>
+          <div class="vuln-details">
+            System accepts weak passwords lacking length or complexity requirements.
+            <div class="example">Registered user using &#x27;1234567890&#x27; as password â€” no complexity or length validation.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="vuln-card" onclick="toggle(this)">
+      <div class="vuln-title">11. Insufficient Logout (Session Token Still Valid After Logout)</div>
+      <div class="vuln-details">
+        Session remains valid even after logout, allowing re-use of token.
+        <div class="sub-vuln" onclick="event.stopPropagation(); toggle(this)">
+          <strong>âž¤ Insufficient Logout (Session Token Still Valid After Logout)</strong>
+          <div class="vuln-details">
+            Session remains valid even after logout, allowing re-use of token.
+            <div class="example">Logged out, reused session cookie in new browser â€” still active.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="vuln-card" onclick="toggle(this)">
+      <div class="vuln-title">12. Missing Secure &amp; HttpOnly Flags on Cookies</div>
+      <div class="vuln-details">
+        Cookies lack security attributes, increasing risk of theft via XSS or MITM.
+        <div class="sub-vuln" onclick="event.stopPropagation(); toggle(this)">
+          <strong>âž¤ Missing Secure &amp; HttpOnly Flags on Cookies</strong>
+          <div class="vuln-details">
+            Cookies lack security attributes, increasing risk of theft via XSS or MITM.
+            <div class="example">Intercepted session cookie lacked HttpOnly flag â€” accessible via XSS payload.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="vuln-card" onclick="toggle(this)">
+      <div class="vuln-title">13. User Impersonation via Form Field Tampering</div>
+      <div class="vuln-details">
+        Form fields can be modified to perform actions as another user.
+        <div class="sub-vuln" onclick="event.stopPropagation(); toggle(this)">
+          <strong>âž¤ User Impersonation via Form Field Tampering</strong>
+          <div class="vuln-details">
+            Form fields can be modified to perform actions as another user.
+            <div class="example">Changed hidden input &#x27;user_id=101&#x27; to &#x27;user_id=1&#x27; in POST request â†’ action executed as admin.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="vuln-card" onclick="toggle(this)">
+      <div class="vuln-title">14. Directory Listing Enabled (`/downloads`, `/icons/`, `/assets/`, `/vendor/`)</div>
+      <div class="vuln-details">
+        Web server displays list of files, which may include sensitive content.
+        <div class="sub-vuln" onclick="event.stopPropagation(); toggle(this)">
+          <strong>âž¤ Directory Listing Enabled (`/downloads`, `/icons/`, `/assets/`, `/vendor/`)</strong>
+          <div class="vuln-details">
+            Web server displays list of files, which may include sensitive content.
+            <div class="example">Accessed /assets/ â†’ full file listing exposed with .env and config.zip.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="vuln-card" onclick="toggle(this)">
+      <div class="vuln-title">15. Session Fixation</div>
+      <div class="vuln-details">
+        Attacker sets a session ID for the victim, allowing session hijack after login.
+        <div class="sub-vuln" onclick="event.stopPropagation(); toggle(this)">
+          <strong>âž¤ Session Fixation</strong>
+          <div class="vuln-details">
+            Attacker sets a session ID for the victim, allowing session hijack after login.
+            <div class="example">Set session ID in browser, logged in victim â€” attacker gained access using fixed session ID.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="vuln-card" onclick="toggle(this)">
+      <div class="vuln-title">16. SQL Error Message Disclosure</div>
+      <div class="vuln-details">
+        SQL errors are displayed to the user, exposing query structure.
+        <div class="sub-vuln" onclick="event.stopPropagation(); toggle(this)">
+          <strong>âž¤ SQL Error Message Disclosure</strong>
+          <div class="vuln-details">
+            SQL errors are displayed to the user, exposing query structure.
+            <div class="example">Entered invalid input into form â†’ server returned SQL syntax error with table structure.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="vuln-card" onclick="toggle(this)">
+      <div class="vuln-title">17. Clickjacking</div>
+      <div class="vuln-details">
+        Application can be loaded in an iframe, tricking users into clicking hidden UI.
+        <div class="sub-vuln" onclick="event.stopPropagation(); toggle(this)">
+          <strong>âž¤ Clickjacking</strong>
+          <div class="vuln-details">
+            Application can be loaded in an iframe, tricking users into clicking hidden UI.
+            <div class="example">Loaded login page in iframe on attacker domain â€” tricked user into clicking invisible buttons.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="vuln-card" onclick="toggle(this)">
+      <div class="vuln-title">18. Account Takeover via Misused Password Reset Parameters</div>
+      <div class="vuln-details">
+        Password reset logic can be manipulated to control other accounts.
+        <div class="sub-vuln" onclick="event.stopPropagation(); toggle(this)">
+          <strong>âž¤ Account Takeover via Misused Password Reset Parameters</strong>
+          <div class="vuln-details">
+            Password reset logic can be manipulated to control other accounts.
+            <div class="example">Reset link included user UUID: /reset?uid=123. Changed to /reset?uid=124 and successfully reset another user&#x27;s password.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="vuln-card" onclick="toggle(this)">
+      <div class="vuln-title">19. Open Redirection</div>
+      <div class="vuln-details">
+        Redirects use unvalidated user input, potentially sending users to malicious sites.
+        <div class="sub-vuln" onclick="event.stopPropagation(); toggle(this)">
+          <strong>âž¤ Open Redirection</strong>
+          <div class="vuln-details">
+            Redirects use unvalidated user input, potentially sending users to malicious sites.
+            <div class="example">URL /redirect?url=http://evil.com â†’ redirected user to phishing page.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="vuln-card" onclick="toggle(this)">
+      <div class="vuln-title">20. Missing Content Security Policy (CSP) Header</div>
+      <div class="vuln-details">
+        Lack of CSP allows broader scope for XSS and injection.
+        <div class="sub-vuln" onclick="event.stopPropagation(); toggle(this)">
+          <strong>âž¤ Missing Content Security Policy (CSP) Header</strong>
+          <div class="vuln-details">
+            Lack of CSP allows broader scope for XSS and injection.
+            <div class="example">No CSP header allowed inline scripts and untrusted JS from other domains to execute.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="vuln-card" onclick="toggle(this)">
+      <div class="vuln-title">21. Application Exposed on HTTP Port (e.g., 6601)</div>
+      <div class="vuln-details">
+        App exposed via uncommon HTTP ports, potentially overlooked during testing.
+        <div class="sub-vuln" onclick="event.stopPropagation(); toggle(this)">
+          <strong>âž¤ Application Exposed on HTTP Port (e.g., 6601)</strong>
+          <div class="vuln-details">
+            App exposed via uncommon HTTP ports, potentially overlooked during testing.
+            <div class="example">Navigated to http://target:6601 â†’ accessed internal debug interface.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="vuln-card" onclick="toggle(this)">
+      <div class="vuln-title">22. Strict Transport Security (HSTS) Max-Age Too Low (`2592000`)</div>
+      <div class="vuln-details">
+        Short HSTS period weakens protection against SSL stripping.
+        <div class="sub-vuln" onclick="event.stopPropagation(); toggle(this)">
+          <strong>âž¤ Strict Transport Security (HSTS) Max-Age Too Low (`2592000`)</strong>
+          <div class="vuln-details">
+            Short HSTS period weakens protection against SSL stripping.
+            <div class="example">Max-age set to 30 days â€” downgraded HTTPS after expiration.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="vuln-card" onclick="toggle(this)">
+      <div class="vuln-title">23. OTP Flooding Attack</div>
+      <div class="vuln-details">
+        Lack of rate-limiting allows spamming OTPs to user phone/email.
+        <div class="sub-vuln" onclick="event.stopPropagation(); toggle(this)">
+          <strong>âž¤ OTP Flooding Attack</strong>
+          <div class="vuln-details">
+            Lack of rate-limiting allows spamming OTPs to user phone/email.
+            <div class="example">Requested OTP repeatedly â€” no rate limiting blocked spamming.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="vuln-card" onclick="toggle(this)">
+      <div class="vuln-title">24. Password Brute-Force on Login Attempts</div>
+      <div class="vuln-details">
+        Login has no protection against repeated failed attempts.
+        <div class="sub-vuln" onclick="event.stopPropagation(); toggle(this)">
+          <strong>âž¤ Password Brute-Force on Login Attempts</strong>
+          <div class="vuln-details">
+            Login has no protection against repeated failed attempts.
+            <div class="example">Used Hydra tool on /login â†’ no CAPTCHA or lockout triggered.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="vuln-card" onclick="toggle(this)">
+      <div class="vuln-title">25. Unrestricted File Upload (HTML File Allowed)</div>
+      <div class="vuln-details">
+        Application allows uploading of executable or web-accessible files.
+        <div class="sub-vuln" onclick="event.stopPropagation(); toggle(this)">
+          <strong>âž¤ Unrestricted File Upload (HTML File Allowed)</strong>
+          <div class="vuln-details">
+            Application allows uploading of executable or web-accessible files.
+            <div class="example">Uploaded .html file in profile upload â†’ rendered script when visited.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="vuln-card" onclick="toggle(this)">
+      <div class="vuln-title">26. Unauthenticated MongoDB Access</div>
+      <div class="vuln-details">
+        Database is exposed without authentication on public network.
+        <div class="sub-vuln" onclick="event.stopPropagation(); toggle(this)">
+          <strong>âž¤ Unauthenticated MongoDB Access</strong>
+          <div class="vuln-details">
+            Database is exposed without authentication on public network.
+            <div class="example">Connected to mongo://server:27017 â†’ full DB access without password.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="vuln-card" onclick="toggle(this)">
+      <div class="vuln-title">27. External DNS Interaction</div>
+      <div class="vuln-details">
+        Server sends DNS queries to attacker-controlled domains (e.g., SSRF detection).
+        <div class="sub-vuln" onclick="event.stopPropagation(); toggle(this)">
+          <strong>âž¤ External DNS Interaction</strong>
+          <div class="vuln-details">
+            Server sends DNS queries to attacker-controlled domains (e.g., SSRF detection).
+            <div class="example">Sent payload to internal server â†’ triggered DNS lookup to attacker.dnslog.com.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="vuln-card" onclick="toggle(this)">
+      <div class="vuln-title">28. Hardcoded Encryption Key in JavaScript</div>
+      <div class="vuln-details">
+        Key used for encryption is exposed in client-side JS files.
+        <div class="sub-vuln" onclick="event.stopPropagation(); toggle(this)">
+          <strong>âž¤ Hardcoded Encryption Key in JavaScript</strong>
+          <div class="vuln-details">
+            Key used for encryption is exposed in client-side JS files.
+            <div class="example">Found AES key in frontend.js â†’ used it to decrypt token from app.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="vuln-card" onclick="toggle(this)">
+      <div class="vuln-title">29. Exposed Camunda Login Page</div>
+      <div class="vuln-details">
+        Camunda dashboard is accessible and may allow brute-force login attempts.
+        <div class="sub-vuln" onclick="event.stopPropagation(); toggle(this)">
+          <strong>âž¤ Exposed Camunda Login Page</strong>
+          <div class="vuln-details">
+            Camunda dashboard is accessible and may allow brute-force login attempts.
+            <div class="example">Accessed /camunda/app â†’ default login panel exposed to public.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="vuln-card" onclick="toggle(this)">
+      <div class="vuln-title">30. Exposed Tomcat Manager Login Prompt</div>
+      <div class="vuln-details">
+        Tomcat Manager interface is exposed, often with default creds.
+        <div class="sub-vuln" onclick="event.stopPropagation(); toggle(this)">
+          <strong>âž¤ Exposed Tomcat Manager Login Prompt</strong>
+          <div class="vuln-details">
+            Tomcat Manager interface is exposed, often with default creds.
+            <div class="example">GET /manager/html prompted for Tomcat credentials â€” default creds worked.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="vuln-card" onclick="toggle(this)">
+      <div class="vuln-title">31. Default Index Page Present (Tomcat)</div>
+      <div class="vuln-details">
+        Default Tomcat landing page indicates default configuration.
+        <div class="sub-vuln" onclick="event.stopPropagation(); toggle(this)">
+          <strong>âž¤ Default Index Page Present (Tomcat)</strong>
+          <div class="vuln-details">
+            Default Tomcat landing page indi
 
     <a href="index.html" class="back-btn">← Back to Home</a>
   </section>
