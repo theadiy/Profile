@@ -8,16 +8,14 @@
   <style>
     body {
       margin: 0;
-      background-color: #fff;
       font-family: 'Montserrat', sans-serif;
+      background: #fff;
       color: #111;
       opacity: 0;
       animation: fadeIn 0.8s ease forwards;
     }
 
-    @keyframes fadeIn {
-      to { opacity: 1; }
-    }
+    @keyframes fadeIn { to { opacity: 1; } }
 
     header {
       background: #e53935;
@@ -30,31 +28,93 @@
 
     section {
       max-width: 900px;
-      margin: 40px auto;
-      padding: 20px;
-      font-size: 1.1rem;
+      margin: 30px auto;
+      padding: 0 20px;
+    }
+
+    .vuln-card {
+      border: 2px solid #e53935;
+      margin-bottom: 20px;
+      padding: 15px 20px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .vuln-card:hover {
+      background: #ffecec;
+    }
+
+    .vuln-title {
+      font-weight: 700;
+      font-size: 1.2rem;
+    }
+
+    .vuln-details {
+      margin-top: 10px;
+      display: none;
+      font-size: 0.95rem;
+      line-height: 1.5;
     }
 
     .back-btn {
       display: inline-block;
-      margin-top: 30px;
+      margin: 40px 20px;
       padding: 10px 20px;
       background: #000;
       color: #fff;
       text-decoration: none;
-      border: none;
     }
 
-    .back-btn:hover {
-      background: #444;
+    .example {
+      margin-top: 10px;
+      background: #f5f5f5;
+      padding: 10px;
+      border-left: 4px solid #e53935;
+      font-family: monospace;
+      font-size: 0.9rem;
     }
   </style>
 </head>
 <body>
+
   <header>Web Application Security</header>
+
   <section>
-    <p>This section covers all my learnings on OWASP Top 10, PortSwigger Labs, bug bounty tricks, authentication bypasses, SSRF, XSS, SQLi, and more.</p>
+    <!-- Vulnerability 1 -->
+    <div class="vuln-card" onclick="toggle(this)">
+      <div class="vuln-title">1. IDOR – Insecure Direct Object Reference</div>
+      <div class="vuln-details">
+        The application exposes internal object references, like user IDs, without proper authorization checks.
+        <div class="example">
+          URL: /profile/123<br>
+          Change to /profile/124 → Accessing someone else’s profile
+        </div>
+      </div>
+    </div>
+
+    <!-- Vulnerability 2 -->
+    <div class="vuln-card" onclick="toggle(this)">
+      <div class="vuln-title">2. Stored XSS – Comment Section Injection</div>
+      <div class="vuln-details">
+        Attacker injects a JavaScript payload into a persistent field. When other users visit the page, the script executes in their browser.
+        <div class="example">
+          Input: &lt;script&gt;alert('XSS')&lt;/script&gt;<br>
+          Rendered unsanitized in blog comments section.
+        </div>
+      </div>
+    </div>
+
+    <!-- Add more here -->
+
     <a href="index.html" class="back-btn">← Back to Home</a>
   </section>
+
+  <script>
+    function toggle(el) {
+      const details = el.querySelector('.vuln-details');
+      details.style.display = details.style.display === 'block' ? 'none' : 'block';
+    }
+  </script>
+
 </body>
 </html>
