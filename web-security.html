@@ -107,42 +107,56 @@
 
     <!-- IDOR with sub-scenarios -->
     <div class="vuln-card" onclick="toggle(this)">
-      <div class="vuln-title">1. IDOR – Insecure Direct Object Reference</div>
+    <div class="vuln-card" onclick="toggle(this)">
+  <div class="vuln-title">1. IDOR – Insecure Direct Object Reference</div>
+  <div class="vuln-details">
+    Improper access control leads to unauthorized access to user data by modifying object identifiers like user IDs, order numbers, or file references.
+
+    <div class="sub-vuln" onclick="event.stopPropagation(); toggle(this)">
+      <strong>➤ Profile Access</strong>
       <div class="vuln-details">
-        Improper access control leads to unauthorized access to user data by modifying object identifiers like user IDs, order numbers, or file references.
-
-        <div class="sub-vuln" onclick="event.stopPropagation(); toggle(this)">
-          <strong>➤ Profile Access</strong>
-          <div class="vuln-details">
-            Modifying a user ID in the URL gave access to other users' profiles.
-            <div class="example">
-              GET /user/102 → Changed to /user/103<br>
-              Result: Viewed another user's private data.
-            </div>
-          </div>
-        </div>
-
-        <div class="sub-vuln" onclick="event.stopPropagation(); toggle(this)">
-          <strong>➤ Booking/Order Manipulation</strong>
-          <div class="vuln-details">
-            Attacker could cancel someone else's booking due to lack of ownership validation.
-            <div class="example">
-              GET /cancelBooking?id=ABC123 → Changed to another booking ID → booking cancelled
-            </div>
-          </div>
-        </div>
-
-        <div class="sub-vuln" onclick="event.stopPropagation(); toggle(this)">
-          <strong>➤ File Download ID Manipulation</strong>
-          <div class="vuln-details">
-            Changing the file ID parameter allowed unauthorized file downloads.
-            <div class="example">
-              /download?file=confidential-report.pdf
-            </div>
-          </div>
+        Modifying a user ID in the URL gave access to other users' profiles.
+        <div class="example">
+          GET /user/102 → Changed to /user/103<br>
+          Result: Viewed another user's private data.
         </div>
       </div>
     </div>
+
+    <div class="sub-vuln" onclick="event.stopPropagation(); toggle(this)">
+      <strong>➤ Booking/Order Manipulation</strong>
+      <div class="vuln-details">
+        Attacker could cancel someone else's booking due to lack of ownership validation.
+        <div class="example">
+          GET /cancelBooking?id=ABC123 → Changed to another booking ID → booking cancelled
+        </div>
+      </div>
+    </div>
+
+    <div class="sub-vuln" onclick="event.stopPropagation(); toggle(this)">
+      <strong>➤ File Download ID Manipulation</strong>
+      <div class="vuln-details">
+        Changing the file ID parameter allowed unauthorized file downloads.
+        <div class="example">
+          /download?file=confidential-report.pdf
+        </div>
+      </div>
+    </div>
+
+    <div class="sub-vuln" onclick="event.stopPropagation(); toggle(this)">
+      <strong>➤ Invoice File Name Tampering</strong>
+      <div class="vuln-details">
+        Invoices were named with usernames and stored under predictable URLs. Changing the filename revealed other users' invoices.
+        <div class="example">
+          Original: /invoices/invoice-user1.pdf<br>
+          Modified: /invoices/invoice-user2.pdf<br>
+          → Downloaded another user’s invoice without authorization.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 
     <!-- Host Header Injection Open Redirect -->
     <div class="vuln-card" onclick="toggle(this)">
