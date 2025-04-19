@@ -1,75 +1,102 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Aditya's Learning Archive</title>
-  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --bg-color: #0f0f0f;
+      --card-bg: #1a1a1a;
+      --text-color: #f0f0f0;
+      --border-color: #00fff7;
+      --shadow-color: #00fff7;
+      --accent-pink: #ff0080;
+      --accent-green: #39ff14;
+      --accent-yellow: #ffe600;
+      --font-main: 'Orbitron', sans-serif;
+    }
+
     body {
       margin: 0;
-      background: #fff8e7;
-      font-family: 'Rubik', sans-serif;
-      color: #1a1a1a;
+      font-family: var(--font-main);
+      background-color: var(--bg-color);
+      color: var(--text-color);
     }
+
     header {
       text-align: center;
       padding: 40px 20px;
-      border: 4px solid #001f54;
+      border: 3px solid var(--border-color);
       margin: 30px;
-      box-shadow: 6px 6px 0 #001f54;
-      background: #ffffff;
+      box-shadow: 0 0 15px var(--shadow-color);
+      background-color: var(--card-bg);
     }
+
     header h1 {
       font-size: 2.5rem;
-      color: #001f54;
+      color: var(--accent-pink);
       margin-bottom: 30px;
+      text-shadow: 0 0 8px var(--accent-pink);
     }
+
     .nav-buttons button {
       font-size: 1rem;
       padding: 12px 20px;
       margin: 0 10px;
-      border: none;
-      background: #ffe4b3;
-      border: 3px solid #001f54;
-      box-shadow: 5px 5px 0 #001f54;
+      border: 2px solid var(--accent-yellow);
+      background: transparent;
+      color: var(--accent-yellow);
+      box-shadow: 0 0 10px var(--accent-yellow);
       cursor: pointer;
       font-weight: bold;
+      transition: all 0.3s ease;
     }
+
     .nav-buttons button:hover {
-      transform: translateY(-2px);
+      background: var(--accent-yellow);
+      color: #000;
+      transform: scale(1.05);
     }
 
     section {
       margin: 40px 30px;
       padding: 20px;
-      background: #ffffff;
-      border: 4px solid #001f54;
-      box-shadow: 6px 6px 0 #001f54;
+      background: var(--card-bg);
+      border: 3px solid var(--border-color);
+      box-shadow: 0 0 12px var(--shadow-color);
     }
 
     h2 {
-      font-size: 1.8rem;
+      font-size: 1.6rem;
       margin-bottom: 15px;
     }
 
     .web-security h2 {
-      color: #ff6f00;
+      color: var(--accent-pink);
+      text-shadow: 0 0 5px var(--accent-pink);
     }
+
     .tools h2 {
-      color: #005f99;
+      color: var(--border-color);
+      text-shadow: 0 0 5px var(--border-color);
     }
+
     .certifications h2 {
-      color: #2e7d32;
+      color: var(--accent-green);
+      text-shadow: 0 0 5px var(--accent-green);
     }
+
     .projects h2 {
-      color: #512da8;
+      color: var(--accent-yellow);
+      text-shadow: 0 0 5px var(--accent-yellow);
     }
 
     p {
       font-size: 1rem;
       line-height: 1.6;
-      color: #2c2c2c;
+      color: var(--text-color);
     }
   </style>
 </head>
