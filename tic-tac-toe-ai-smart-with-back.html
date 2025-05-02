@@ -1,0 +1,224 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Tic Tac Toe – Bauhaus Edition</title>
+  <style>
+    body {
+      font-family: 'Bebas Neue', sans-serif;
+      background: #fdd835;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+    }
+    h1 {
+      margin: 20px;
+      font-size: 3em;
+      color: #1e88e5;
+    }
+    #container {
+      position: relative;
+      width: 320px;
+      margin: auto;
+    }
+    #board {
+      display: grid;
+      grid-template-columns: repeat(3, 100px);
+      grid-gap: 10px;
+      margin: 20px auto;
+      width: 320px;
+    }
+    .cell {
+      width: 100px;
+      height: 100px;
+      background: #fff;
+      font-size: 3em;
+      color: #e53935;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 4px solid #111;
+      cursor: pointer;
+    }
+    .cell.taken {
+      cursor: not-allowed;
+    }
+    #line {
+      position: absolute;
+      height: 6px;
+      background: #e53935;
+      z-index: 10;
+      transform-origin: left center;
+      display: none;
+    }
+    #status {
+      font-size: 1.5em;
+      color: #111;
+    }
+    #restart {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background: #1e88e5;
+      color: white;
+      font-size: 1em;
+      border: none;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>Tic Tac Toe</h1>
+  <div id="status">Player X's turn</div>
+  <div id="container">
+    <div id="board"></div>
+    <div id="line"></div>
+  </div>
+  <button id="restart">Restart</button><br><a href="index.html" style="display:inline-block;margin:20px;font-size:1.2em;text-decoration:none;color:#1e88e5;">← Back to Home</a>
+
+  <script>
+    const board = document.getElementById('board');
+    const status = document.getElementById('status');
+    const restart = document.getElementById('restart');
+    const line = document.getElementById('line');
+    let cells = [];
+    let currentPlayer = 'X';
+    let gameOver = false;
+
+    function drawWinLine(a, b) {
+      const rect1 = cells[a].getBoundingClientRect();
+      const rect2 = cells[b].getBoundingClientRect();
+      const containerRect = document.getElementById('container').getBoundingClientRect();
+
+      const x1 = rect1.left + rect1.width / 2 - containerRect.left;
+      const y1 = rect1.top + rect1.height / 2 - containerRect.top;
+      const x2 = rect2.left + rect2.width / 2 - containerRect.left;
+      const y2 = rect2.top + rect2.height / 2 - containerRect.top;
+
+      const length = Math.hypot(x2 - x1, y2 - y1);
+      const angle = Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI;
+
+      line.style.display = 'block';
+      line.style.width = length + 'px';
+      line.style.left = x1 + 'px';
+      line.style.top = y1 + 'px';
+      line.style.transform = 'rotate(' + angle + 'deg)';
+    }
+
+    function checkWin() {
+      const wins = [
+        [0,1,2], [3,4,5], [6,7,8],
+        [0,3,6], [1,4,7], [2,5,8],
+        [0,4,8], [2,4,6]
+      ];
+      return wins.some(combo => {
+        const [a,b,c] = combo;
+        if (cells[a].textContent &&
+            cells[a].textContent === cells[b].textContent &&
+            cells[a].textContent === cells[c].textContent) {
+          drawWinLine(a, c);
+          return true;
+        }
+      });
+    }
+
+    function checkDraw() {
+      return [...cells].every(cell => cell.textContent);
+    }
+
+    
+    function aiMove() {
+      if (gameOver) return;
+
+      const combos = [
+        [0,1,2],[3,4,5],[6,7,8],
+        [0,3,6],[1,4,7],[2,5,8],
+        [0,4,8],[2,4,6]
+      ];
+
+      function tryCombo(mark) {
+        for (let [a,b,c] of combos) {
+          const values = [cells[a].textContent, cells[b].textContent, cells[c].textContent];
+          if (values.filter(v => v === mark).length === 2 && values.includes("")) {
+            const index = [a,b,c][values.indexOf("")];
+            cells[index].textContent = 'O';
+            cells[index].classList.add('taken');
+            return true;
+          }
+        }
+        return false;
+      }
+
+      // 1. Try to win
+      if (tryCombo("O")) { if (checkWin()) { status.textContent = "Player O wins!"; gameOver = true; return; } }
+
+      // 2. Block player
+      if (tryCombo("X")) { currentPlayer = "X"; status.textContent = "Player X's turn"; return; }
+
+      // 3. Pick center
+      if (!cells[4].textContent) {
+        cells[4].textContent = 'O';
+        cells[4].classList.add('taken');
+        currentPlayer = "X"; status.textContent = "Player X's turn";
+        return;
+      }
+
+      // 4. Pick corners
+      const corners = [0,2,6,8];
+      for (let i of corners) {
+        if (!cells[i].textContent) {
+          cells[i].textContent = 'O';
+          cells[i].classList.add('taken');
+          currentPlayer = "X"; status.textContent = "Player X's turn";
+          return;
+        }
+      }
+
+      // 5. Pick any remaining
+      for (let cell of cells) {
+        if (!cell.textContent) {
+          cell.textContent = 'O';
+          cell.classList.add('taken');
+          currentPlayer = "X"; status.textContent = "Player X's turn";
+          return;
+        }
+      }
+    }
+
+    function handleClick(e) {
+
+      if (e.target.textContent || gameOver) return;
+      e.target.textContent = currentPlayer;
+      e.target.classList.add('taken');
+
+      if (checkWin()) {
+        status.textContent = `Player ${currentPlayer} wins!`;
+        gameOver = true;
+      } else if (checkDraw()) {
+        status.textContent = "It's a draw!";
+        gameOver = true;
+      } else {
+        currentPlayer = 'O'; status.textContent = `Player O's turn`; setTimeout(() => aiMove(), 300);
+      }
+    }
+
+    function resetGame() {
+      board.innerHTML = '';
+      line.style.display = 'none';
+      gameOver = false;
+      currentPlayer = 'X';
+      status.textContent = "Player X's turn";
+      for (let i = 0; i < 9; i++) {
+        const cell = document.createElement('div');
+        cell.classList.add('cell');
+        cell.addEventListener('click', handleClick);
+        board.appendChild(cell);
+      }
+      cells = board.querySelectorAll('.cell');
+    }
+
+    restart.addEventListener('click', resetGame);
+    resetGame();
+  </script>
+</body>
+</html>
