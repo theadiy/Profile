@@ -1,0 +1,67 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Games – Bauhaus Arcade</title>
+  <style>
+    body {
+      font-family: 'Bebas Neue', sans-serif;
+      background: #fdd835;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
+    h1 {
+      font-size: 3em;
+      color: #1e88e5;
+      margin: 20px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      padding: 20px;
+      max-width: 900px;
+      margin: auto;
+    }
+    .game-tile {
+      background: #fff;
+      border: 4px solid #111;
+      border-radius: 8px;
+      padding: 20px;
+      text-decoration: none;
+      color: #111;
+      font-size: 1.2em;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: transform 0.2s ease;
+    }
+    .game-tile:hover {
+      transform: scale(1.05);
+    }
+    .game-icon {
+      font-size: 3em;
+      margin-bottom: 10px;
+    }
+    .label {
+      color: #e53935;
+      font-size: 1em;
+    }
+  </style>
+</head>
+<body>
+  <h1>Bauhaus Games</h1>
+  <div class="grid">
+    <a href="tic-tac-toe-ai-smart-with-back.html" class="game-tile">
+      <div class="game-icon">X<span style="color:#e53935;">O</span></div>
+      <div class="label">Tic Tac Toe</div>
+    </a>
+    <a href="color-code-rush-immediate-remove.html" class="game-tile">
+      <div class="game-icon">🎨</div>
+      <div class="label">Color Code Rush</div>
+    </a>
+  </div>
+</body>
+</html>
