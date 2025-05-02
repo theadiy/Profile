@@ -1,0 +1,110 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Color Code Rush</title>
+<style>
+    body {
+      margin: 0;
+      background: #fff;
+      font-family: 'Bebas Neue', sans-serif;
+      text-align: center;
+    }
+    h1 {
+      margin-top: 20px;
+      color: #1e88e5;
+      font-size: 2.5em;
+    }
+    #game {
+      position: relative;
+      width: 300px;
+      height: 500px;
+      margin: 20px auto;
+      border: 6px solid #111;
+      background: #f5f5f5;
+      overflow: hidden;
+    }
+    .block {
+      width: 80px;
+      height: 80px;
+      position: absolute;
+      top: 0;
+      left: 0;
+      border-radius: 8px;
+    }
+    #score {
+      font-size: 1.2em;
+      color: #e53935;
+    }
+  </style>
+</head>
+<body>
+<h1>Color Code Rush</h1>
+<div id="score">Score: 0</div>
+<div id="game">
+
+<script>
+  const game = document.getElementById("game");
+  const scoreDisplay = document.getElementById("score");
+  const colors = ["red", "blue", "yellow"];
+  const keys = { "r": "red", "b": "blue", "y": "yellow" };
+  let score = 0;
+  let speed = 1.5;
+
+  function spawnBlock() {
+    const color = colors[Math.floor(Math.random() * colors.length)];
+    const block = document.createElement("div");
+    block.classList.add("block");
+    block.style.background = color;
+    block.dataset.color = color;
+    block.style.left = Math.random() * (game.clientWidth - 80) + "px";
+    game.appendChild(block);
+
+    let top = 0;
+    const interval = setInterval(() => {
+      if (top > game.clientHeight - 80) {
+        clearInterval(interval);
+        if (game.contains(block)) {
+          game.removeChild(block);
+          alert("Game Over! Final Score: " + score);
+          document.location.reload();
+        }
+      } else {
+        top += speed;
+        block.style.top = top + "px";
+      }
+    }, 20);
+    block.dataset.intervalId = interval;
+  }
+
+  setInterval(spawnBlock, 1200);
+
+  function pressKey(k) {
+    const key = k.toLowerCase();
+    const matchColor = keys[key];
+    if (!matchColor) return;
+
+    const blocks = document.querySelectorAll(".block");
+    for (let block of blocks) {
+      if (block.dataset.color === matchColor) {
+        clearInterval(block.dataset.intervalId);
+        game.removeChild(block);
+        score++;
+        scoreDisplay.textContent = "Score: " + score;
+        speed += 0.05;
+        break;
+      }
+    }
+  }
+
+  document.addEventListener("keydown", (e) => pressKey(e.key));
+</script>
+
+</div><div id="controls" style="margin: 10px auto 30px auto; width: 300px; display:flex; justify-content:center; gap:10px;">
+<button onclick="pressKey('r')" style="padding:15px 30px;font-size:1.5em;background:red;color:white;border:none;margin:5px;border-radius:5px;">R</button>
+<button onclick="pressKey('b')" style="padding:15px 30px;font-size:1.5em;background:blue;color:white;border:none;margin:5px;border-radius:5px;">B</button>
+<button onclick="pressKey('y')" style="padding:15px 30px;font-size:1.5em;background:gold;color:black;border:none;margin:5px;border-radius:5px;">Y</button>
+</div></body>
+</html>
