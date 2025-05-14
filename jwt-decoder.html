@@ -45,6 +45,32 @@
       box-sizing: border-box;
     }
 
+    .output-block {
+      margin-top: 30px;
+    }
+
+    .output-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+
+    .copy-btn {
+      padding: 4px 12px;
+      font-size: 0.9rem;
+      background-color: #000;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .copy-btn:hover {
+      background-color: #444;
+    }
+
     pre {
       background: #f6f6f6;
       padding: 15px;
@@ -52,6 +78,7 @@
       overflow-x: auto;
       white-space: pre-wrap;
       word-wrap: break-word;
+      font-size: 0.95rem;
     }
 
     button {
@@ -61,6 +88,8 @@
       color: #fff;
       border: none;
       cursor: pointer;
+      font-size: 1rem;
+      border-radius: 4px;
     }
 
     button:hover {
@@ -87,14 +116,26 @@
 
   <section>
     <label for="jwt">Paste your JWT:</label>
-    <textarea id="jwt" rows="6" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."></textarea>
+    <textarea id="jwt" rows="6" placeholder="eyJhbGciOi..."></textarea>
     <button onclick="decodeJWT()">Decode</button>
 
-    <h3>Header:</h3>
-    <pre id="headerOutput"></pre>
+    <div class="output-block">
+      <div class="output-header">
+        <span>Header:</span>
+        <button class="copy-btn" onclick="copyOutput('headerOutput')">Copy</button>
+      </div>
+      <pre id="headerOutput"></pre>
+    </div>
 
-    <h3>Payload:</h3>
-    <pre id="payloadOutput"></pre>
+    <div class="output-block">
+      <div class="output-header">
+        <span>Payload:</span>
+        <button class="copy-btn" onclick="copyOutput('payloadOutput')">Copy</button>
+      </div>
+      <pre id="payloadOutput"></pre>
+    </div>
+
+    <p class="note">⚠️ Note: These tools are created for educational and ethical purposes only. Please use them responsibly and do not engage in any activity that violates laws or harms others.</p>
   </section>
 
   <footer>
@@ -104,18 +145,32 @@
   <script>
     function decodeJWT() {
       const jwt = document.getElementById("jwt").value.trim();
-      const [header, payload] = jwt.split(".").slice(0, 2);
+      const parts = jwt.split(".");
+      const headerOut = document.getElementById("headerOutput");
+      const payloadOut = document.getElementById("payloadOutput");
+
+      if (parts.length < 2) {
+        headerOut.textContent = "❌ Invalid JWT format.";
+        payloadOut.textContent = "";
+        return;
+      }
 
       try {
-        const decodedHeader = JSON.parse(atob(header));
-        const decodedPayload = JSON.parse(atob(payload));
-
-        document.getElementById("headerOutput").innerText = JSON.stringify(decodedHeader, null, 2);
-        document.getElementById("payloadOutput").innerText = JSON.stringify(decodedPayload, null, 2);
-      } catch (err) {
-        document.getElementById("headerOutput").innerText = "Invalid JWT format.";
-        document.getElementById("payloadOutput").innerText = "";
+        const header = JSON.parse(atob(parts[0]));
+        const payload = JSON.parse(atob(parts[1]));
+        headerOut.textContent = JSON.stringify(header, null, 2);
+        payloadOut.textContent = JSON.stringify(payload, null, 2);
+      } catch (e) {
+        headerOut.textContent = "❌ Unable to decode JWT.";
+        payloadOut.textContent = "";
       }
+    }
+
+    function copyOutput(id) {
+      const content = document.getElementById(id).innerText;
+      navigator.clipboard.writeText(content).then(() => {
+        alert("Copied to clipboard!");
+      });
     }
   </script>
 
