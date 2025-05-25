@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Hash Identifier</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@500&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      background-color: #fff;
+      font-family: 'Montserrat', sans-serif;
+      color: #111;
+      opacity: 0;
+      animation: fadeIn 0.8s ease forwards;
+    }
+
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+
+    header {
+      background: #fdd835;
+      padding: 50px;
+      color: #000;
+      text-align: center;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 3rem;
+    }
+
+    section {
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 20px;
+      font-size: 1.1rem;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      font-size: 1rem;
+      font-family: monospace;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      box-sizing: border-box;
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background: #000;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      font-size: 1rem;
+      border-radius: 4px;
+    }
+
+    button:hover {
+      background: #444;
+    }
+
+    .result {
+      margin-top: 20px;
+      padding: 15px;
+      background: #f6f6f6;
+      border-radius: 6px;
+      font-family: monospace;
+      font-size: 1rem;
+    }
+
+    .note {
+      margin-top: 30px;
+      font-size: 0.95rem;
+      color: #666;
+    }
+
+    footer {
+      text-align: center;
+      padding: 40px;
+      font-size: 0.9rem;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+
+  <header>Hash Identifier</header>
+
+  <section>
+    <label for="hashInput">Enter a hash string:</label>
+    <input id="hashInput" type="text" placeholder="e.g. e99a18c428cb38d5f260853678922e03" />
+    <button onclick="identifyHash()">Identify Hash</button>
+
+    <div class="result" id="result">🔍 Awaiting input...</div>
+
+    <p class="note">⚠️ Note: These tools are created for educational and ethical purposes only. Please use them responsibly and do not engage in any activity that violates laws or harms others.</p>
+  </section>
+
+  <footer>
+    Sharing knowledge and fun | © 2025 Aditya
+  </footer>
+
+  <script>
+    function identifyHash() {
+      const hash = document.getElementById("hashInput").value.trim();
+      const result = document.getElementById("result");
+      if (!hash) {
+        result.textContent = "❌ Please enter a hash.";
+        return;
+      }
+
+      const length = hash.length;
+      const lower = hash.toLowerCase();
+      const isHex = /^[a-f0-9]+$/.test(lower);
+      const isBase64 = /^[A-Za-z0-9+/=]+$/.test(hash);
+      const guess = [];
+
+      if (isHex) {
+        switch (length) {
+          case 4:
+            guess.push("CRC16");
+            break;
+          case 8:
+            guess.push("Adler32", "CRC32");
+            break;
+          case 16:
+            guess.push("CRC128");
+            break;
+          case 32:
+            guess.push("MD5", "NTLM", "MD4");
+            break;
+          case 34:
+            guess.push("MD2");
+            break;
+          case 40:
+            guess.push("SHA-1", "RipeMD-160");
+            break;
+          case 48:
+            guess.push("SHA-224", "SHA3-224");
+            break;
+          case 56:
+            guess.push("SHA-224", "SHA3-224", "RipeMD-256", "MD6-256");
+            break;
+          case 64:
+            guess.push("SHA-256", "SHA3-256", "RipeMD-256", "MD6-256");
+            break;
+          case 96:
+            guess.push("SHA-384", "SHA3-384", "MD6-384");
+            break;
+          case 128:
+            guess.push("SHA-512", "SHA3-512", "MD6-512", "Whirlpool");
+            break;
+          default:
+            guess.push("❓ Unknown hex-based hash length");
+        }
+      } else if (isBase64) {
+        guess.push("🧬 Base64 encoded hash or data");
+      } else {
+        guess.push("❌ Not a valid hex or base64 string");
+      }
+
+      result.innerHTML = `<strong>🧠 Possible Matches:</strong><br>• ${guess.join("<br>• ")}`;
+    }
+  </script>
+
+</body>
+</html>
