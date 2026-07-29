@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quarter Deadline Planner</title>
+<style>
+  :root{
+    --bg:#f7f8fa;
+    --panel:#ffffff;
+    --panel2:#f0f2f5;
+    --border:#d4d9e0;
+    --text:#1a2029;
+    --muted:#5c6675;
+    --muted2:#8a94a6;
+    --q1:#1c6fc9;
+    --q2:#188a63;
+    --q3:#b5790a;
+    --dl:#c8362a;
+    --today:#1a2029;
+    --mono: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+    --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--sans);
+    min-height:100vh;
+  }
+  .app{
+    display:grid;
+    grid-template-columns: 320px 1fr;
+    min-height:100vh;
+  }
+  @media (max-width: 900px){
+    .app{grid-template-columns: 1fr;}
+  }
+
+  /* ---------- Sidebar ---------- */
+  .sidebar{
+    background:var(--panel);
+    border-right:1px solid var(--border);
+    padding:24px 20px;
+    display:flex;
+    flex-direction:column;
+    gap:22px;
+  }
+  .brand{
+    font-size:13px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--muted);
+    font-weight:600;
+  }
+  .brand span{color:var(--dl);}
+  h1{
+    font-size:20px;
+    margin:2px 0 0;
+    font-weight:650;
+    letter-spacing:-.01em;
+  }
+  .sub{
+    font-size:12.5px;
+    color:var(--muted);
+    line-height:1.5;
+    margin-top:-8px;
+  }
+
+  .field-list{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+  }
+  .field{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    background:var(--panel2);
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:11px 12px;
+  }
+  .field .dot{
+    width:9px;height:9px;border-radius:50%;flex:none;
+  }
+  .field .label{
+    display:flex;align-items:center;gap:9px;
+    font-size:13px;color:var(--muted);
+  }
+  .field .value{
+    font-family:var(--mono);
+    font-size:13.5px;
+    color:var(--text);
+    font-weight:600;
+  }
+  .field .value.empty{color:var(--muted2);font-weight:400;font-style:italic;}
+
+  .actions{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    margin-top:2px;
+  }
+  button{
+    font-family:var(--sans);
+    cursor:pointer;
+  }
+  .btn{
+    background:var(--panel2);
+    border:1px solid var(--border);
+    color:var(--text);
+    padding:10px 12px;
+    border-radius:9px;
+    font-size:13px;
+    font-weight:550;
+    text-align:left;
+    display:flex;
+    align-items:center;
+    gap:9px;
+    transition:.12s border-color, .12s background;
+  }
+  .btn:hover:not(:disabled){border-color:#9aa4b2;background:#e9edf2;}
+  .btn:disabled{opacity:.35;cursor:not-allowed;}
+  .btn .dot{width:9px;height:9px;border-radius:50%;flex:none;}
+  .btn.active{border-color:var(--text);background:#e9edf2;}
+  .btn.deadline .dot{background:var(--dl);}
+  .btn.q1 .dot{background:var(--q1);}
+  .btn.q2 .dot{background:var(--q2);}
+  .btn.q3 .dot{background:var(--q3);}
+
+  .hint{
+    font-size:12px;
+    color:var(--muted);
+    background:#eef1f5;
+    border:1px dashed #9aa4b2;
+    border-radius:9px;
+    padding:9px 11px;
+    line-height:1.5;
+    display:none;
+  }
+  .hint.show{display:block;}
+
+  .reset-row{
+    margin-top:auto;
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+  }
+  .btn.ghost{
+    background:transparent;
+    border:1px solid var(--border);
+    color:var(--muted);
+    justify-content:center;
+  }
+  .btn.ghost:hover{color:var(--text);border-color:#9aa4b2;}
+
+  /* ---------- Main ---------- */
+  .main{
+    padding:24px 28px 60px;
+    display:flex;
+    flex-direction:column;
+    gap:22px;
+    min-width:0;
+  }
+  .topbar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:16px;
+    flex-wrap:wrap;
+  }
+  .range-nav{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:6px 8px;
+  }
+  .range-nav .navbtn{
+    background:var(--panel2);
+    border:1px solid var(--border);
+    color:var(--text);
+    width:30px;height:30px;
+    border-radius:7px;
+    display:flex;align-items:center;justify-content:center;
+    font-size:15px;
+  }
+  .range-nav .navbtn:hover{border-color:#9aa4b2;}
+  .range-label{
+    font-family:var(--mono);
+    font-size:13px;
+    color:var(--muted);
+    padding:0 6px;
+    white-space:nowrap;
+  }
+  .today-btn{
+    font-size:12px;color:var(--muted);
+    background:none;border:1px solid var(--border);
+    padding:6px 10px;border-radius:7px;
+  }
+  .today-btn:hover{color:var(--text);border-color:#9aa4b2;}
+
+  /* Timeline strip - signature element */
+  .timeline-card{
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-radius:14px;
+    padding:22px 26px 26px;
+  }
+  .timeline-card .tc-head{
+    display:flex;justify-content:space-between;align-items:baseline;
+    margin-bottom:18px;
+  }
+  .tc-head h2{
+    font-size:13px;text-transform:uppercase;letter-spacing:.1em;
+    color:var(--muted);font-weight:650;margin:0;
+  }
+  .tc-head .gap-readout{
+    font-family:var(--mono);font-size:12px;color:var(--muted2);
+  }
+  .timeline-track{
+    position:relative;
+    height:64px;
+  }
+  .timeline-line{
+    position:absolute;
+    top:28px;left:0;right:0;
+    height:2px;
+    background:var(--border);
+  }
+  .timeline-seg{
+    position:absolute;
+    top:28px;height:2px;
+    background:linear-gradient(90deg, var(--muted2), var(--muted2));
+    opacity:.55;
+  }
+  .timeline-node{
+    position:absolute;
+    top:20px;
+    width:18px;height:18px;
+    border-radius:50%;
+    border:3px solid var(--bg);
+    transform:translateX(-50%);
+    box-shadow:0 0 0 1px var(--border);
+  }
+  .timeline-node-label{
+    position:absolute;
+    top:46px;
+    transform:translateX(-50%);
+    font-family:var(--mono);
+    font-size:11px;
+    white-space:nowrap;
+    color:var(--muted);
+  }
+  .timeline-node-tag{
+    position:absolute;
+    top:-2px;
+    transform:translateX(-50%);
+    font-size:10px;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--muted2);
+    white-space:nowrap;
+  }
+  .empty-state{
+    color:var(--muted);
+    font-size:13px;
+    text-align:center;
+    padding:14px 0 4px;
+  }
+
+  /* Calendar grid */
+  .cal-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(168px, 1fr));
+    gap:10px;
+  }
+  .month-card{
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-radius:9px;
+    padding:9px 9px 10px;
+  }
+  .month-card.current-month{border-color:#9aa4b2;}
+  .month-title{
+    font-size:11px;
+    font-weight:650;
+    margin-bottom:6px;
+    display:flex;
+    justify-content:space-between;
+    color:var(--text);
+  }
+  .month-title .yr{color:var(--muted);font-weight:500;}
+  .dow-row{
+    display:grid;
+    grid-template-columns:repeat(7,1fr);
+    margin-bottom:2px;
+  }
+  .dow-row span{
+    font-size:8px;
+    text-align:center;
+    color:var(--muted2);
+    font-weight:600;
+  }
+  .days{
+    display:grid;
+    grid-template-columns:repeat(7,1fr);
+    gap:1px;
+  }
+  .day{
+    aspect-ratio:1/1;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:9.5px;
+    font-family:var(--mono);
+    border-radius:4px;
+    color:var(--text);
+    cursor:default;
+    position:relative;
+  }
+  .day.blank{visibility:hidden;}
+  .day.clickable{cursor:pointer;}
+  .day.clickable:hover{background:#dfe4ea;}
+  .day.today{box-shadow:inset 0 0 0 1.5px var(--today);}
+  .day.deadline{background:var(--dl);color:#ffffff;font-weight:700;}
+  .day.q1{background:var(--q1);color:#ffffff;font-weight:700;}
+  .day.q2{background:var(--q2);color:#ffffff;font-weight:700;}
+  .day.q3{background:var(--q3);color:#ffffff;font-weight:700;}
+  .day.pending-target{outline:2px dashed var(--text);outline-offset:1px;}
+
+  .mode-banner{
+    position:sticky;
+    top:0;
+    z-index:5;
+    background:#eef1f5;
+    border:1px solid #9aa4b2;
+    color:var(--text);
+    font-size:13px;
+    padding:10px 16px;
+    border-radius:10px;
+    display:none;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+  }
+  .mode-banner.show{display:flex;}
+  .mode-banner b{font-weight:650;}
+  .mode-banner .cancel{
+    background:none;border:1px solid #b8c0cc;color:var(--muted);
+    font-size:12px;padding:5px 10px;border-radius:7px;
+  }
+  .mode-banner .cancel:hover{color:var(--text);}
+
+  ::-webkit-scrollbar{width:10px;height:10px;}
+  ::-webkit-scrollbar-thumb{background:#dfe4ea;border-radius:6px;}
+  ::-webkit-scrollbar-track{background:transparent;}
+</style>
+</head>
+<body>
+
+<div class="app">
+  <aside class="sidebar">
+    <div>
+      <div class="brand">Milestone<span>·</span>Planner</div>
+      <h1>Quarter Deadline Planner</h1>
+      <p class="sub">Set a deadline, get four evenly spaced checkpoints. Slip one, and the rest re-balance around it automatically.</p>
+    </div>
+
+    <div class="field-list" id="fieldList"></div>
+
+    <div class="actions">
+      <button class="btn deadline" id="btnDeadline"><span class="dot"></span><span>Set / change deadline</span></button>
+      <button class="btn q1" id="btnQ1" disabled><span class="dot"></span><span>Move Quarter 1</span></button>
+      <button class="btn q2" id="btnQ2" disabled><span class="dot"></span><span>Move Quarter 2</span></button>
+      <button class="btn q3" id="btnQ3" disabled><span class="dot"></span><span>Move Quarter 3</span></button>
+    </div>
+
+    <div class="hint" id="modeHint"></div>
+
+    <div class="reset-row">
+      <button class="btn ghost" id="btnClear">Clear all</button>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="topbar">
+      <div class="range-nav">
+        <button class="navbtn" id="prevYear" title="Shift range one year back">‹</button>
+        <span class="range-label" id="rangeLabel"></span>
+        <button class="navbtn" id="nextYear" title="Shift range one year forward">›</button>
+      </div>
+      <button class="today-btn" id="btnToday">Jump to today's range</button>
+    </div>
+
+    <div class="mode-banner" id="modeBanner">
+      <span id="modeBannerText"></span>
+      <button class="cancel" id="modeCancel">Cancel</button>
+    </div>
+
+    <div class="timeline-card">
+      <div class="tc-head">
+        <h2>Timeline</h2>
+        <span class="gap-readout" id="gapReadout"></span>
+      </div>
+      <div class="timeline-track" id="timelineTrack"></div>
+      <div class="empty-state" id="timelineEmpty">Pick a deadline on the calendar below to generate the timeline.</div>
+    </div>
+
+    <div class="cal-grid" id="calGrid"></div>
+  </main>
+</div>
+
+<script>
+(function(){
+  const MS_DAY = 86400000;
+  const MONTH_NAMES = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+  const DOW = ["S","M","T","W","T","F","S"];
+
+  // ---------- State ----------
+  const today = stripTime(new Date());
+  let yearShift = 0;          // shifts the displayed 2-year window
+  let deadline = null;        // Date or null
+  let q = [null,null,null];   // Q1, Q2, Q3 (Q4 == deadline)
+  let mode = null;            // 'deadline' | 'q1' | 'q2' | 'q3' | null
+
+  function stripTime(d){ return new Date(d.getFullYear(), d.getMonth(), d.getDate()); }
+  function fmt(d){
+    if(!d) return null;
+    return d.toLocaleDateString('en-GB', {day:'2-digit', month:'short', year:'numeric'});
+  }
+  function sameDate(a,b){
+    return a && b && a.getFullYear()===b.getFullYear() && a.getMonth()===b.getMonth() && a.getDate()===b.getDate();
+  }
+  function addMonthsClamped(date, n){
+    const day = date.getDate();
+    const d = new Date(date.getFullYear(), date.getMonth()+n, 1);
+    const daysInMonth = new Date(d.getFullYear(), d.getMonth()+1, 0).getDate();
+    d.setDate(Math.min(day, daysInMonth));
+    return d;
+  }
+  function addDaysClamped(date, n){
+    return new Date(date.getTime() + n*MS_DAY);
+  }
+
+  // ---------- Core scheduling logic ----------
+  function setDeadline(d){
+    deadline = stripTime(d);
+    q[2] = addMonthsClamped(deadline, -3);
+    q[1] = addMonthsClamped(deadline, -6);
+    q[0] = addMonthsClamped(deadline, -9);
+  }
+
+  // index: 0,1,2 for Q1,Q2,Q3. newDate becomes that quarter's date.
+  // Re-derive a single equal gap (in days) from (deadline - newDate) / (segments remaining to deadline),
+  // then reposition every quarter relative to the fixed deadline using that gap.
+  function moveQuarter(index, newDate){
+    newDate = stripTime(newDate);
+    const segmentsToDeadline = 4 - (index+1); // Q1->3, Q2->2, Q3->1
+    const totalDays = Math.round((deadline - newDate) / MS_DAY);
+    const gapDays = totalDays / segmentsToDeadline;
+    for(let k=0;k<3;k++){
+      const stepsFromDeadline = 3 - k; // Q1:3, Q2:2, Q3:1
+      q[k] = addDaysClamped(deadline, -Math.round(gapDays*stepsFromDeadline));
+    }
+  }
+
+  // ---------- Sidebar rendering ----------
+  const fieldList = document.getElementById('fieldList');
+  function renderFields(){
+    const rows = [
+      {label:'Deadline (Q4)', color:'var(--dl)', val: deadline},
+      {label:'Quarter 1', color:'var(--q1)', val: q[0]},
+      {label:'Quarter 2', color:'var(--q2)', val: q[1]},
+      {label:'Quarter 3', color:'var(--q3)', val: q[2]},
+    ];
+    fieldList.innerHTML = rows.map(r => `
+      <div class="field">
+        <div class="label"><span class="dot" style="background:${r.color}"></span>${r.label}</div>
+        <div class="value ${r.val?'':'empty'}">${r.val ? fmt(r.val) : '—'}</div>
+      </div>
+    `).join('');
+
+    document.getElementById('btnQ1').disabled = !deadline;
+    document.getElementById('btnQ2').disabled = !deadline;
+    document.getElementById('btnQ3').disabled = !deadline;
+  }
+
+  // ---------- Mode / interaction ----------
+  const btnDeadline = document.getElementById('btnDeadline');
+  const btnQ1 = document.getElementById('btnQ1');
+  const btnQ2 = document.getElementById('btnQ2');
+  const btnQ3 = document.getElementById('btnQ3');
+  const modeHint = document.getElementById('modeHint');
+  const modeBanner = document.getElementById('modeBanner');
+  const modeBannerText = document.getElementById('modeBannerText');
+
+  const MODE_TEXT = {
+    deadline: 'Click any date on the calendar to set it as the deadline.',
+    q1: 'Click a new date for Quarter 1 — the other checkpoints will re-balance.',
+    q2: 'Click a new date for Quarter 2 — the other checkpoints will re-balance.',
+    q3: 'Click a new date for Quarter 3 — the other checkpoints will re-balance.',
+  };
+
+  function setMode(m){
+    mode = m;
+    [btnDeadline, btnQ1, btnQ2, btnQ3].forEach(b => b.classList.remove('active'));
+    if(m === 'deadline') btnDeadline.classList.add('active');
+    if(m === 'q1') btnQ1.classList.add('active');
+    if(m === 'q2') btnQ2.classList.add('active');
+    if(m === 'q3') btnQ3.classList.add('active');
+
+    if(m){
+      modeHint.textContent = MODE_TEXT[m];
+      modeHint.classList.add('show');
+      modeBannerText.innerHTML = MODE_TEXT[m];
+      modeBanner.classList.add('show');
+    } else {
+      modeHint.classList.remove('show');
+      modeBanner.classList.remove('show');
+    }
+    renderCalendar();
+  }
+
+  btnDeadline.addEventListener('click', () => setMode(mode === 'deadline' ? null : 'deadline'));
+  btnQ1.addEventListener('click', () => setMode(mode === 'q1' ? null : 'q1'));
+  btnQ2.addEventListener('click', () => setMode(mode === 'q2' ? null : 'q2'));
+  btnQ3.addEventListener('click', () => setMode(mode === 'q3' ? null : 'q3'));
+  document.getElementById('modeCancel').addEventListener('click', () => setMode(null));
+  document.getElementById('btnClear').addEventListener('click', () => {
+    deadline = null; q = [null,null,null]; setMode(null); renderFields(); renderTimeline(); renderCalendar();
+  });
+
+  function handleDayClick(dateObj){
+    if(!mode) return;
+    if(mode === 'deadline'){
+      setDeadline(dateObj);
+    } else {
+      const idx = mode === 'q1' ? 0 : mode === 'q2' ? 1 : 2;
+      if(dateObj >= deadline){
+        alert('A quarter checkpoint must fall before the deadline.');
+        return;
+      }
+      moveQuarter(idx, dateObj);
+    }
+    setMode(null);
+    renderFields();
+    renderTimeline();
+    renderCalendar();
+  }
+
+  // ---------- Timeline (signature element) ----------
+  const track = document.getElementById('timelineTrack');
+  const timelineEmpty = document.getElementById('timelineEmpty');
+  const gapReadout = document.getElementById('gapReadout');
+
+  function renderTimeline(){
+    track.innerHTML = '';
+    if(!deadline){
+      timelineEmpty.style.display = 'block';
+      gapReadout.textContent = '';
+      return;
+    }
+    timelineEmpty.style.display = 'none';
+
+    const points = [
+      {label:'Q1', date:q[0], color:'var(--q1)'},
+      {label:'Q2', date:q[1], color:'var(--q2)'},
+      {label:'Q3', date:q[2], color:'var(--q3)'},
+      {label:'Deadline', date:deadline, color:'var(--dl)'},
+    ];
+    const start = q[0], end = deadline;
+    const totalSpan = (end - start) / MS_DAY;
+
+    const line = document.createElement('div');
+    line.className = 'timeline-line';
+    track.appendChild(line);
+
+    const gaps = [];
+    for(let i=0;i<points.length-1;i++){
+      gaps.push(Math.round((points[i+1].date - points[i].date)/MS_DAY));
+    }
+    gapReadout.textContent = 'gaps (days): ' + gaps.join(' · ');
+
+    points.forEach((p, i) => {
+      const pct = totalSpan === 0 ? (i/(points.length-1))*100 : ((p.date - start)/MS_DAY / totalSpan) * 100;
+      const node = document.createElement('div');
+      node.className = 'timeline-node';
+      node.style.left = pct + '%';
+      node.style.background = p.color;
+      track.appendChild(node);
+
+      const tag = document.createElement('div');
+      tag.className = 'timeline-node-tag';
+      tag.style.left = pct + '%';
+      tag.textContent = p.label;
+      track.appendChild(tag);
+
+      const lbl = document.createElement('div');
+      lbl.className = 'timeline-node-label';
+      lbl.style.left = pct + '%';
+      lbl.textContent = fmt(p.date);
+      track.appendChild(lbl);
+    });
+  }
+
+  // ---------- Calendar grid rendering ----------
+  const calGrid = document.getElementById('calGrid');
+  const rangeLabel = document.getElementById('rangeLabel');
+
+  function getRange(){
+    // window: one year back to one year forward from today, shifted by yearShift years
+    const start = new Date(today.getFullYear()-1+yearShift, today.getMonth(), 1);
+    const end = new Date(today.getFullYear()+1+yearShift, today.getMonth(), 1);
+    return {start, end};
+  }
+
+  function classifyDate(d){
+    if(deadline && sameDate(d, deadline)) return 'deadline';
+    if(q[0] && sameDate(d, q[0])) return 'q1';
+    if(q[1] && sameDate(d, q[1])) return 'q2';
+    if(q[2] && sameDate(d, q[2])) return 'q3';
+    return null;
+  }
+
+  function renderCalendar(){
+    const {start, end} = getRange();
+    rangeLabel.textContent = `${MONTH_NAMES[start.getMonth()].slice(0,3)} ${start.getFullYear()} — ${MONTH_NAMES[(end.getMonth()+11)%12].slice(0,3)} ${end.getFullYear()}`;
+
+    calGrid.innerHTML = '';
+    let cursor = new Date(start.getFullYear(), start.getMonth(), 1);
+
+    while(cursor < end){
+      const y = cursor.getFullYear(), m = cursor.getMonth();
+      const firstDow = new Date(y, m, 1).getDay();
+      const daysInMonth = new Date(y, m+1, 0).getDate();
+      const isCurrentMonth = (y === today.getFullYear() && m === today.getMonth());
+
+      const card = document.createElement('div');
+      card.className = 'month-card' + (isCurrentMonth ? ' current-month' : '');
+
+      const title = document.createElement('div');
+      title.className = 'month-title';
+      title.innerHTML = `<span>${MONTH_NAMES[m]}</span><span class="yr">${y}</span>`;
+      card.appendChild(title);
+
+      const dowRow = document.createElement('div');
+      dowRow.className = 'dow-row';
+      DOW.forEach(d => { const s = document.createElement('span'); s.textContent = d; dowRow.appendChild(s); });
+      card.appendChild(dowRow);
+
+      const days = document.createElement('div');
+      days.className = 'days';
+      for(let i=0;i<firstDow;i++){
+        const blank = document.createElement('div');
+        blank.className = 'day blank';
+        days.appendChild(blank);
+      }
+      for(let dnum=1; dnum<=daysInMonth; dnum++){
+        const dateObj = new Date(y, m, dnum);
+        const cell = document.createElement('div');
+        cell.className = 'day';
+        cell.textContent = dnum;
+
+        if(sameDate(dateObj, today)) cell.classList.add('today');
+        const cls = classifyDate(dateObj);
+        if(cls) cell.classList.add(cls);
+
+        if(mode){
+          cell.classList.add('clickable');
+          cell.addEventListener('click', () => handleDayClick(dateObj));
+        }
+        days.appendChild(cell);
+      }
+      card.appendChild(days);
+      calGrid.appendChild(card);
+
+      cursor = new Date(y, m+1, 1);
+    }
+  }
+
+  document.getElementById('prevYear').addEventListener('click', () => { yearShift -= 1; renderCalendar(); });
+  document.getElementById('nextYear').addEventListener('click', () => { yearShift += 1; renderCalendar(); });
+  document.getElementById('btnToday').addEventListener('click', () => { yearShift = 0; renderCalendar(); });
+
+  // ---------- Init ----------
+  renderFields();
+  renderTimeline();
+  renderCalendar();
+})();
+</script>
+
+</body>
+</html>
